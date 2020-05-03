@@ -10,8 +10,10 @@ The reference implementation can be found on from https://uk.mathworks.com/matla
 
 ## Development
 
-`git clone https://github.com/gravi-toni/subpixel-edges.git`
-`pip install -e .` 
+```
+git clone https://github.com/gravi-toni/subpixel-edges.git
+pip install -e .
+```
 
 To run the examples (includes OpenCV):
 
