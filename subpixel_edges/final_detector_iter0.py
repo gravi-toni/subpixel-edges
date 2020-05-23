@@ -79,7 +79,10 @@ def main_iter0(F, threshold, iters, order):
     ep.i1 = np.r_[np.maximum(Ay, By), np.maximum(Ax, Bx)]
 
     # erase elements outside the image size
-    index_to_erase = np.union1d(np.where(ep.x > cols), np.where(ep.y > rows))
+    index_to_erase_1 = np.union1d(np.where(ep.x > cols-1), np.where(ep.y > rows-1))
+    index_to_erase_2 = np.union1d(np.where(ep.x < 0), np.where(ep.y < 0))
+    
+    index_to_erase = np.union1d(index_to_erase_1,index_to_erase_2)
 
     ep.x = np.delete(ep.x, index_to_erase)
     ep.y = np.delete(ep.y, index_to_erase)

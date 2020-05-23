@@ -5,7 +5,7 @@ from subpixel_edges.circle import circle_horizontal_window, circle_vertical_wind
 
 
 @njit(cache=True)
-def h_edges(F, G, rows, Gx, Gy, w, edges, order, threshold, x, y, cols):
+def h_edges(F, G, rows, Gx, Gy, w, edges, order, threshold, x, y, cols,  I, C):
     FF = F.transpose().ravel()
     GG = G.transpose().ravel()
 
@@ -20,8 +20,6 @@ def h_edges(F, G, rows, Gx, Gy, w, edges, order, threshold, x, y, cols):
     ny = np.zeros((n_edges, 1))
     curv = np.zeros((n_edges, 1))
 
-    I = np.zeros((rows, cols))
-    C = np.zeros((rows, cols))
 
     valid = np.full((n_edges, 1), False)
 
@@ -223,13 +221,13 @@ def h_edges(F, G, rows, Gx, Gy, w, edges, order, threshold, x, y, cols):
                 inner_intensity = max(AA, BB)
                 outer_intensity = min(AA, BB)
 
-            center = ([x[edge] + s * R * nx[k], y[edge] - a[k] + s * R * ny[k]])
-            subimage = circle_vertical_window(j, i, center[0], center[1], R, inner_intensity, outer_intensity,
-                                              pixel_grid_resol)
+        center = ([x[edge] + s * R * nx[k], y[edge] - a[k] + s * R * ny[k]])
+        subimage = circle_vertical_window(j, i, center[0], center[1], R, inner_intensity, outer_intensity,
+                                          pixel_grid_resol)
 
-            # update counter and intensity images
-            I[i - 4:i + 4 + 1, j - 1 - 1:j + 1] = I[i - 4:i + 4 + 1, j - 1 - 1:j + 1] + window * subimage
-            C[i - 4:i + 4 + 1, j - 1 - 1:j + 1] = C[i - 4:i + 4 + 1, j - 1 - 1:j + 1] + window
+        # update counter and intensity images
+        I[i-4:i+4+1,j-1:j+1+1] = I[i-4:i+4+1,j-1:j+1+1] + window*subimage
+        C[i-4:i+4+1,j-1:j+1+1] = C[i-4:i+4+1,j-1:j+1+1] + window
 
     # remove invalid values
     valid = valid.reshape((-1,))
@@ -475,13 +473,13 @@ def v_edges(F, G, rows, Gx, Gy, w, edges, order, threshold, x, y, I, C):
                 inner_intensity = max(AA, BB)
                 outer_intensity = min(AA, BB)
 
-            center = [x[edge] - a[k] + s * R * nx[k], y[edge] + s * R * ny[k]]
-            subimage = circle_horizontal_window(j, i, center[0], center[1],
+        center = [x[edge] - a[k] + s * R * nx[k], y[edge] + s * R * ny[k]]
+        subimage = circle_horizontal_window(j, i, center[0], center[1],
                                                 R, inner_intensity, outer_intensity, pixelGridResol)
 
         # update counter and intensity images
-        I[i - 1:i + 1 + 1, j - 4 - 1:j + 4] = I[i - 1:i + 1 + 1, j - 4 - 1:j + 4] + window * subimage
-        C[i - 1:i + 1 + 1, j - 4 - 1:j + 4] = C[i - 1:i + 1 + 1, j - 4 - 1:j + 4] + window
+        I[i-1:i+1+1,j-4:j+4+1] = I[i-1:i+1+1,j-4:j+4+1] + window*subimage
+        C[i-1:i+1+1,j-4:j+4+1] = C[i-1:i+1+1,j-4:j+4+1] + window
 
     edges = edges[valid.reshape((-1,))]
     A = A[valid.reshape((-1,))]

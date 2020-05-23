@@ -19,4 +19,6 @@ def subpixel_edges(img, threshold, iters, order):
     elif iters == 1:
         return main_iter1(img, threshold, iters, order)
     elif iters > 1:
-        return main_iterN(img, threshold, iters, order)
+        for iterN in range(iters):
+            ep,img = main_iterN(img, threshold, iters, order)
+        return ep
