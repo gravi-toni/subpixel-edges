@@ -8,7 +8,7 @@ from subpixel_edges.final_detector_iterN import main_iterN
 def init():
     """
     Run all the methods to trigger JIT compilation. Only needed the first time
-    the code is executed.
+    the code is executed. This method may be removed in future releases.
     """
     img = np.zeros((8, 8))
 
@@ -42,7 +42,7 @@ def subpixel_edges(img, threshold, iters, order):
                 on the image previously smoothed by a 3x3 mask
                 (default) (sections 4 and 5 of the paper)
             >1: Oriented to high-noise images. Several stages of
-                smoothing + detection + sinthetic image creation are
+                smoothing + detection + synthetic image creation are
                 applied (section 6 of the paper). A few iterations are
                 normally enough.
     order: int
