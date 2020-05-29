@@ -8,7 +8,8 @@ from subpixel_edges.final_detector_iterN import main_iterN
 def init():
     """
     Run all the methods to trigger JIT compilation. Only needed the first time
-    the code is executed. This method may be removed in future releases.
+    the code is executed. This method may be removed in future releases, for example if
+    AOT compilation is used instead.
     """
     img = np.zeros((8, 8))
 

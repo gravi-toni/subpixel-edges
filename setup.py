@@ -16,7 +16,8 @@ setuptools.setup(
                       'scipy>=1.4.1',
                       'numba>=0.49'],
     extras_require={
-        'tests': ['pytest'],
+        'tests': ['pytest',
+                  'opencv-python>=4.1.0.25'],
         'examples': ['matplotlib>=3.2.1',
                      'opencv-python>=4.1.0.25'],
     },
