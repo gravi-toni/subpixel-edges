@@ -93,10 +93,10 @@ class TestFromMatlab:
         mask[[257, 258]] = False
 
         assert np.array_equiv(edges.position[mask], test_edges.position[mask].ravel('F') - 1)
-        assert np.allclose(edges.x, test_edges.x.ravel('F') - 1, atol=1e-1)
-        assert np.allclose(edges.y, test_edges.y.ravel('F') - 1, atol=1e-1)
-        assert np.allclose(edges.nx, test_edges.nx.ravel('F'), atol=1e-1)
-        assert np.allclose(edges.ny, test_edges.ny.ravel('F'), atol=1e-1)
-        assert np.allclose(edges.curv, test_edges.curv.ravel('F'), atol=1e-1)
-        assert np.allclose(edges.i0, test_edges.i0.ravel('F'), atol=1e-1)
-        assert np.allclose(edges.i1, test_edges.i1.ravel('F'), atol=1e0)
+        assert np.allclose(edges.x, test_edges.x.ravel('F') - 1, atol=1e-2, rtol=1e-5)
+        assert np.allclose(edges.y, test_edges.y.ravel('F') - 1, atol=1e-1, rtol=1e-4)
+        assert np.allclose(edges.nx, test_edges.nx.ravel('F'), atol=1e-2, rtol=1e-5)
+        assert np.allclose(edges.ny, test_edges.ny.ravel('F'), atol=1e-2, rtol=1e-5)
+        assert np.allclose(edges.curv, test_edges.curv.ravel('F'), atol=1e-1, rtol=1e-4)
+        assert np.allclose(edges.i0, test_edges.i0.ravel('F'), atol=1e-1, rtol=1e-4)
+        assert np.allclose(edges.i1, test_edges.i1.ravel('F'), atol=1e-1, rtol=1e-4)
