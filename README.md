@@ -16,6 +16,10 @@ git clone https://github.com/gravi-toni/subpixel-edges.git
 pip install -e .
 ```
 
+To run the tests (includes OpenCV):
+
+`pip install -e .[tests]`
+
 To run the examples (includes OpenCV):
 
 `pip install -e .[examples]`
