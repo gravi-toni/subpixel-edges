@@ -69,16 +69,17 @@ class TestFromMatlab:
         edges = subpixel_edges(img_gray, 25, 1, 2)
 
         mask = np.ones(len(edges.position), dtype=bool)
+        # Excluded values that are known to be different
         mask[[258]] = False
 
         assert np.array_equiv(edges.position[mask], test_edges.position[mask].ravel('F') - 1)
-        assert np.allclose(edges.x, test_edges.x.ravel('F') - 1)
-        assert np.allclose(edges.y, test_edges.y.ravel('F') - 1)
-        assert np.allclose(edges.nx, test_edges.nx.ravel('F'))
-        assert np.allclose(edges.ny, test_edges.ny.ravel('F'))
-        assert np.allclose(edges.curv, test_edges.curv.ravel('F'))
-        assert np.allclose(edges.i0, test_edges.i0.ravel('F'))
-        assert np.allclose(edges.i1, test_edges.i1.ravel('F'))
+        assert np.allclose(edges.x[mask], test_edges.x[mask].ravel('F') - 1)
+        assert np.allclose(edges.y[mask], test_edges.y[mask].ravel('F') - 1)
+        assert np.allclose(edges.nx[mask], test_edges.nx[mask].ravel('F'))
+        assert np.allclose(edges.ny[mask], test_edges.ny[mask].ravel('F'))
+        assert np.allclose(edges.curv[mask], test_edges.curv[mask].ravel('F'))
+        assert np.allclose(edges.i0[mask], test_edges.i0[mask].ravel('F'))
+        assert np.allclose(edges.i1[mask], test_edges.i1[mask].ravel('F'))
 
     def test_iter2(self):
         """
@@ -90,13 +91,21 @@ class TestFromMatlab:
         edges = subpixel_edges(img_gray, 25, 2, 2)
 
         mask = np.ones(len(edges.position), dtype=bool)
+        # Excluded values that are known to be different
         mask[[257, 258]] = False
 
         assert np.array_equiv(edges.position[mask], test_edges.position[mask].ravel('F') - 1)
-        assert np.allclose(edges.x, test_edges.x.ravel('F') - 1, atol=1e-2, rtol=1e-5)
-        assert np.allclose(edges.y, test_edges.y.ravel('F') - 1, atol=1e-1, rtol=1e-4)
-        assert np.allclose(edges.nx, test_edges.nx.ravel('F'), atol=1e-2, rtol=1e-5)
-        assert np.allclose(edges.ny, test_edges.ny.ravel('F'), atol=1e-2, rtol=1e-5)
-        assert np.allclose(edges.curv, test_edges.curv.ravel('F'), atol=1e-1, rtol=1e-4)
-        assert np.allclose(edges.i0, test_edges.i0.ravel('F'), atol=1e-1, rtol=1e-4)
-        assert np.allclose(edges.i1, test_edges.i1.ravel('F'), atol=1e-1, rtol=1e-4)
+        assert np.allclose(edges.x[mask], test_edges.x[mask].ravel('F') - 1,
+                           atol=1e-2, rtol=1e-5)
+        assert np.allclose(edges.y[mask], test_edges.y[mask].ravel('F') - 1,
+                           atol=1e-1, rtol=1e-4)
+        assert np.allclose(edges.nx[mask], test_edges.nx[mask].ravel('F'),
+                           atol=1e-2, rtol=1e-5)
+        assert np.allclose(edges.ny[mask], test_edges.ny[mask].ravel('F'),
+                           atol=1e-2, rtol=1e-5)
+        assert np.allclose(edges.curv[mask], test_edges.curv[mask].ravel('F'),
+                           atol=1e-1, rtol=1e-4)
+        assert np.allclose(edges.i0[mask], test_edges.i0[mask].ravel('F'),
+                           atol=1e-1, rtol=1e-4)
+        assert np.allclose(edges.i1[mask], test_edges.i1[mask].ravel('F'),
+                           atol=1e-1, rtol=1e-4)
