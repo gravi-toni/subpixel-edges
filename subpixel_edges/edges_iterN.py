@@ -4,7 +4,7 @@ from numba import njit
 from subpixel_edges.circle import circle_horizontal_window, circle_vertical_window
 
 
-@njit(cache=True)
+# @njit(cache=True)
 def h_edges(F, G, rows, Gx, Gy, w, edges, order, threshold, x, y, cols,  I, C):
     FF = F.transpose().ravel()
     GG = G.transpose().ravel()
@@ -97,11 +97,11 @@ def h_edges(F, G, rows, Gx, Gy, w, edges, order, threshold, x, y, cols,  I, C):
         SL = 0
         SM = 0
         SR = 0
-        j = np.int(np.floor((edges[k] - 1) / rows) + 1)
-        i = np.int(edges[k] - rows * (j - 1))
+        j = np.int(np.floor((edges[k] - 1) / rows) + 1) 
+        i = np.int(edges[k] - rows * (j-1 )) + 1 
 
         if u_border or d_border:
-            rimvt = np.copy(F[i - 5:i + 6, j - 3:j + 2])
+            rimvt = np.copy(F[i - 5 - 1:i + 5, j - 2 - 1:j + 2])
             if u_border:
                 if m > 0:
                     BB = (FF[edge + m1] + FF[edge - rows + l1]) / 2
@@ -151,7 +151,7 @@ def h_edges(F, G, rows, Gx, Gy, w, edges, order, threshold, x, y, cols,  I, C):
                 rimvt[l2 + 5:11, 1] = AA
                 rimvt[m2 + 5:11, 2] = AA
                 rimvt[r2 + 5:11, 3] = AA
-                rimvt[rr + 5:11, 4] = AA
+                rimvt[rr + 5:11, 4] = AA 
 
                 l2 = 3 + m
                 m2 = 3
@@ -221,13 +221,13 @@ def h_edges(F, G, rows, Gx, Gy, w, edges, order, threshold, x, y, cols,  I, C):
                 inner_intensity = max(AA, BB)
                 outer_intensity = min(AA, BB)
 
-        center = ([x[edge] + s * R * nx[k], y[edge] - a[k] + s * R * ny[k]])
+        center = ([x[edge]+1 + s * R * nx[k], y[edge]+1 - a[k] + s * R * ny[k]])
         subimage = circle_vertical_window(j, i, center[0], center[1], R, inner_intensity, outer_intensity,
                                           pixel_grid_resol)
 
         # update counter and intensity images
-        I[i-4:i+4+1,j-1:j+1+1] = I[i-4:i+4+1,j-1:j+1+1] + window*subimage
-        C[i-4:i+4+1,j-1:j+1+1] = C[i-4:i+4+1,j-1:j+1+1] + window
+        I[i-4-1:i+4,j-1-1:j+1] = I[i-4-1:i+4,j-1-1:j+1] + window*subimage
+        C[i-4-1:i+4,j-1-1:j+1] = C[i-4-1:i+4,j-1-1:j+1] + window
 
     # remove invalid values
     valid = valid.reshape((-1,))
@@ -252,7 +252,7 @@ def h_edges(F, G, rows, Gx, Gy, w, edges, order, threshold, x, y, cols,  I, C):
     return x, y, edges, nx, ny, i0, i1, curv, I, C, G
 
 
-@njit(cache=True)
+# @njit(cache=True)
 def v_edges(F, G, rows, Gx, Gy, w, edges, order, threshold, x, y, I, C):
     n_edges = np.shape(edges)[0]
 
@@ -320,9 +320,9 @@ def v_edges(F, G, rows, Gx, Gy, w, edges, order, threshold, x, y, I, C):
             r2 = r2 + 1
 
         window = np.zeros((3, 9))
-        window[0, l1 + 5:l2 + 5] = 1
-        window[1, m1 + 5:m2 + 5] = 100
-        window[2, r1 + 5:r2 + 5] = 1
+        window[0, l1 + 5-1:l2 + 5] = 1
+        window[1, m1 + 5-1:m2 + 5] = 100
+        window[2, r1 + 5-1:r2 + 5] = 1
 
         # compute intensities
         if m > 0:
@@ -337,23 +337,23 @@ def v_edges(F, G, rows, Gx, Gy, w, edges, order, threshold, x, y, I, C):
         d_border = False
 
         if m1 > -4:
-            partial = np.abs(Gx[edge + (m1 - 2) * rows])
-            if partial > np.abs(Gx[edge] / 4) and partial > threshold / 2:
+            partial = np.abs(GG[edge + (m1 - 2) * rows])
+            if partial > np.abs(GG[edge] / 4) and partial > threshold / 2:
                 u_border = True
 
         if m2 < 4:
-            partial = np.abs(Gx[edge + (m2 + 2) * rows])
-            if partial > np.abs(Gx[edge] / 4) and partial > threshold / 2:
+            partial = np.abs(GG[edge + (m2 + 2) * rows])
+            if partial > np.abs(GG[edge] / 4) and partial > threshold / 2:
                 d_border = True
 
         SL = 0
         SM = 0
         SR = 0
         j = np.int(np.floor((edges[k] - 1) / rows) + 1)
-        i = np.int(edges[k] - rows * (j - 1))
+        i = np.int(edges[k] - rows * (j - 1)) + 1
 
         if u_border or d_border:
-            rimvt = np.copy(F[i - 2:i + 3, j - 6:j + 5])
+            rimvt = np.copy(F[i - 2 - 1:i + 2, j - 5 - 1:j + 5])
             if u_border:
                 if m > 0:
                     BB = (FF[edge + m1 * rows] + FF[edge - 1 + l1 * rows]) / 2
@@ -400,11 +400,11 @@ def v_edges(F, G, rows, Gx, Gy, w, edges, order, threshold, x, y, I, C):
                 else:
                     rr = r2 - p
 
-                rimvt[0, ll + 6:11] = AA
-                rimvt[1, l2 + 6:11] = AA
-                rimvt[2, m2 + 6:11] = AA
-                rimvt[3, r2 + 6:11] = AA
-                rimvt[4, rr + 6:11] = AA
+                rimvt[0, ll + 6-1:11] = AA
+                rimvt[1, l2 + 6-1:11] = AA
+                rimvt[2, m2 + 6-1:11] = AA
+                rimvt[3, r2 + 6-1:11] = AA
+                rimvt[4, rr + 6-1:11] = AA
 
                 l2 = 3 + m
                 m2 = 3
@@ -473,13 +473,13 @@ def v_edges(F, G, rows, Gx, Gy, w, edges, order, threshold, x, y, I, C):
                 inner_intensity = max(AA, BB)
                 outer_intensity = min(AA, BB)
 
-        center = [x[edge] - a[k] + s * R * nx[k], y[edge] + s * R * ny[k]]
+        center = [x[edge] + 1 - a[k] + s * R * nx[k], y[edge] + 1 + s * R * ny[k]]
         subimage = circle_horizontal_window(j, i, center[0], center[1],
                                                 R, inner_intensity, outer_intensity, pixelGridResol)
 
         # update counter and intensity images
-        I[i-1:i+1+1,j-4:j+4+1] = I[i-1:i+1+1,j-4:j+4+1] + window*subimage
-        C[i-1:i+1+1,j-4:j+4+1] = C[i-1:i+1+1,j-4:j+4+1] + window
+        I[i-1-1:i+1,j-4-1:j+4] = I[i-1-1:i+1,j-4-1:j+4] + window*subimage
+        C[i-1-1:i+1,j-4-1:j+4] = C[i-1-1:i+1,j-4-1:j+4] + window
 
     edges = edges[valid.reshape((-1,))]
     A = A[valid.reshape((-1,))]
