@@ -2,6 +2,7 @@ import os
 
 import cv2
 import numpy as np
+import pytest
 
 from scipy import io
 
@@ -50,14 +51,14 @@ class TestFromMatlab:
         img_gray = self.read_image('images/ring.tif')
         edges = subpixel_edges(img_gray, 25, 0, 2)
 
-        assert np.array_equiv(edges.position, test_edges.position.ravel('F') - 1)
-        assert np.allclose(edges.x, test_edges.x.ravel('F') - 1)
-        assert np.allclose(edges.y, test_edges.y.ravel('F') - 1)
-        assert np.allclose(edges.nx, test_edges.nx.ravel('F'))
-        assert np.allclose(edges.ny, test_edges.ny.ravel('F'))
-        assert np.allclose(edges.curv, test_edges.curv.ravel('F'))
-        assert np.allclose(edges.i0, test_edges.i0.ravel('F'))
-        assert np.allclose(edges.i1, test_edges.i1.ravel('F'))
+        assert np.array_equiv(edges.position, test_edges.position - 1)
+        assert np.allclose(edges.x, test_edges.x - 1)
+        assert np.allclose(edges.y, test_edges.y - 1)
+        assert np.allclose(edges.nx, test_edges.nx)
+        assert np.allclose(edges.ny, test_edges.ny)
+        assert np.allclose(edges.curv, test_edges.curv)
+        assert np.allclose(edges.i0, test_edges.i0)
+        assert np.allclose(edges.i1, test_edges.i1)
 
     def test_iter1(self):
         """
@@ -72,40 +73,43 @@ class TestFromMatlab:
         # Excluded values that are known to be different
         mask[[258]] = False
 
-        assert np.array_equiv(edges.position[mask], test_edges.position[mask].ravel('F') - 1)
-        assert np.allclose(edges.x[mask], test_edges.x[mask].ravel('F') - 1)
-        assert np.allclose(edges.y[mask], test_edges.y[mask].ravel('F') - 1)
-        assert np.allclose(edges.nx[mask], test_edges.nx[mask].ravel('F'))
-        assert np.allclose(edges.ny[mask], test_edges.ny[mask].ravel('F'))
-        assert np.allclose(edges.curv[mask], test_edges.curv[mask].ravel('F'))
-        assert np.allclose(edges.i0[mask], test_edges.i0[mask].ravel('F'))
-        assert np.allclose(edges.i1[mask], test_edges.i1[mask].ravel('F'))
+        assert np.array_equiv(edges.position[mask], test_edges.position[mask] - 1)
+        assert np.allclose(edges.x[mask], test_edges.x[mask] - 1)
+        assert np.allclose(edges.y[mask], test_edges.y[mask] - 1)
+        assert np.allclose(edges.nx[mask], test_edges.nx[mask])
+        assert np.allclose(edges.ny[mask], test_edges.ny[mask])
+        assert np.allclose(edges.curv[mask], test_edges.curv[mask])
+        assert np.allclose(edges.i0[mask], test_edges.i0[mask])
+        assert np.allclose(edges.i1[mask], test_edges.i1[mask])
 
-    def test_iter2(self):
-        """
-        When `iters` = 2, numerical effects start to be significant.
-        """
-        test_edges = self.read_edges('data/ring_2.mat')
+    @pytest.mark.parametrize('iters', [2, 10, 20])
+    def test_iterN(self, iters):
+        test_edges = self.read_edges(f'data/ring_{iters}.mat')
 
         img_gray = self.read_image('images/ring.tif')
-        edges = subpixel_edges(img_gray, 25, 2, 2)
+        edges = subpixel_edges(img_gray, 25, iters, 2)
 
-        mask = np.ones(len(edges.position), dtype=bool)
-        # Excluded values that are known to be different
-        mask[[257, 258]] = False
+        assert np.array_equiv(edges.position, test_edges.position - 1)
+        assert np.allclose(edges.x, test_edges.x - 1, atol=1e-3)
+        assert np.allclose(edges.y, test_edges.y - 1, atol=1e-3)
+        assert np.allclose(edges.nx, test_edges.nx, atol=1e-3)
+        assert np.allclose(edges.ny, test_edges.ny, atol=1e-3)
+        assert np.allclose(edges.curv, test_edges.curv, atol=1e-3)
+        assert np.allclose(edges.i0, test_edges.i0, atol=1e-3)
+        assert np.allclose(edges.i1, test_edges.i1, atol=1e-3)
 
-        assert np.array_equiv(edges.position[mask], test_edges.position[mask].ravel('F') - 1)
-        assert np.allclose(edges.x[mask], test_edges.x[mask].ravel('F') - 1,
-                           atol=1e-2, rtol=1e-5)
-        assert np.allclose(edges.y[mask], test_edges.y[mask].ravel('F') - 1,
-                           atol=1e-1, rtol=1e-4)
-        assert np.allclose(edges.nx[mask], test_edges.nx[mask].ravel('F'),
-                           atol=1e-2, rtol=1e-5)
-        assert np.allclose(edges.ny[mask], test_edges.ny[mask].ravel('F'),
-                           atol=1e-2, rtol=1e-5)
-        assert np.allclose(edges.curv[mask], test_edges.curv[mask].ravel('F'),
-                           atol=1e-1, rtol=1e-4)
-        assert np.allclose(edges.i0[mask], test_edges.i0[mask].ravel('F'),
-                           atol=1e-1, rtol=1e-4)
-        assert np.allclose(edges.i1[mask], test_edges.i1[mask].ravel('F'),
-                           atol=1e-1, rtol=1e-4)
+    @pytest.mark.parametrize('iters', [2, 10, 20])
+    def test_iterN_with_noise(self, iters):
+        test_edges = self.read_edges(f'data/ring_noise_{iters}.mat')
+
+        img_gray = self.read_image('images/ring_noise.tif')
+        edges = subpixel_edges(img_gray, 25, iters, 2)
+
+        assert np.array_equiv(edges.position, test_edges.position - 1)
+        assert np.allclose(edges.x, test_edges.x - 1, atol=1e-3)
+        assert np.allclose(edges.y, test_edges.y - 1, atol=1e-3)
+        assert np.allclose(edges.nx, test_edges.nx, atol=1e-3)
+        assert np.allclose(edges.ny, test_edges.ny, atol=1e-3)
+        assert np.allclose(edges.curv, test_edges.curv, atol=1e-3)
+        assert np.allclose(edges.i0, test_edges.i0, atol=1e-3)
+        assert np.allclose(edges.i1, test_edges.i1, atol=1e-3)

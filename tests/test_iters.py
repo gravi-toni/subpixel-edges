@@ -23,7 +23,7 @@ class TestIters:
         return EdgePixel.load(os.path.join(self.this_path, filename))
 
     def test_iters(self, iters):
-        test_edges = self.read_edges('data/lena_%s.npz' % iters)
+        test_edges = self.read_edges(f'data/lena_{iters}.npz')
 
         img_gray = self.read_image('images/lena.png')
         edges = subpixel_edges(img_gray, 25, iters, 2)

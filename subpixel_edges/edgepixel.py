@@ -38,18 +38,29 @@ class EdgePixel:
     def load(cls, filename, format='npz'):
         if format == 'npz':
             edges = np.load(filename)
+
+            return EdgePixel(
+                position=edges['position'],
+                x=edges['x'],
+                y=edges['y'],
+                nx=edges['nx'],
+                ny=edges['ny'],
+                curv=edges['curv'],
+                i0=edges['i0'],
+                i1=edges['i1']
+            )
         elif format == 'mat':
             edges = scipy.io.loadmat(filename)
+
+            return EdgePixel(
+                position=edges['position'].ravel('F'),
+                x=edges['x'].ravel('F'),
+                y=edges['y'].ravel('F'),
+                nx=edges['nx'].ravel('F'),
+                ny=edges['ny'].ravel('F'),
+                curv=edges['curv'].ravel('F'),
+                i0=edges['i0'].ravel('F'),
+                i1=edges['i1'].ravel('F')
+            )
         else:
             raise ValueError('File format "%s" not supported' % format)
-
-        return EdgePixel(
-            position=edges['position'],
-            x=edges['x'],
-            y=edges['y'],
-            nx=edges['nx'],
-            ny=edges['ny'],
-            curv=edges['curv'],
-            i0=edges['i0'],
-            i1=edges['i1']
-        )
