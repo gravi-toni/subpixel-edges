@@ -13,23 +13,32 @@ The reference implementation can be found on from https://it.mathworks.com/matla
 
 For a quick overview of the code functionalities, install the following packages first:
 
-1) pip install subpixel-edges
-2) pip install opencv-python
-3) pip install matplotlib
+```bash
+$ pip install subpixel-edges
+$ pip install opencv-python
+$ pip install matplotlib
+```
 
-Then go into the directory you want to use and copy the image you want to analyze (let's say 'lena.png'). 
-Now open a python console and execute the following commands:
+Then go into the directory you want to use and copy the image you want to analyze (let's say `lena.png`). 
+Now open a Python console and execute the following commands:
 
-1) import cv2
-2) import matplotlib.pyplot as plt
-3) from subpixel_edges import subpixel_edges
-4) ((optional)) help(subpixel_edges) 
-5) img = cv2.imread("lena.png")
-6) img_gray = (cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)).astype(float)
-7) edges = subpixel_edges(img_gray,25,0,2)
-8) plt.imshow(img)
-9) plt.quiver(edges.x, edges.y, edges.nx, -edges.ny, scale=40)
-10)plt.show()
+```python
+import cv2
+import matplotlib.pyplot as plt
+
+from subpixel_edges import subpixel_edges
+
+# (optional) 
+help(subpixel_edges) 
+
+img = cv2.imread("lena.png")
+img_gray = (cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)).astype(float)
+edges = subpixel_edges(img_gray, 25, 0, 2)
+
+plt.imshow(img)
+plt.quiver(edges.x, edges.y, edges.nx, -edges.ny, scale=40)
+plt.show()
+```
 
 ## Development
 
