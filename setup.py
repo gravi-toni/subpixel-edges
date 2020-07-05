@@ -5,7 +5,7 @@ with open('README.md', 'r') as readme:
 
 setuptools.setup(
     name='subpixel-edges',
-    version='0.1.0',
+    version='0.1.1',
     author='GraviToni',
     description='Pure Python implementation of subpixel edge location algorithm based on partial area effect',
     long_description=long_description,
