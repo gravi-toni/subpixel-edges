@@ -1,9 +1,5 @@
 import numpy as np
 
-from numba import njit
-
-
-@njit(cache=True)
 def h_edges(x, y, F, G, rows, Gx, Gy, w, maxValidOffset, edges, order, threshold, FF, GG):
     n_edges = np.shape(edges)[0]
 
@@ -186,26 +182,26 @@ def h_edges(x, y, F, G, rows, Gx, Gy, w, maxValidOffset, edges, order, threshold
         b = b[valid]
         c = c[valid]
 
-    nn = np.ones((np.shape(edges)[0], 1))
-    nn[Gy[edges] < 0] = -1
+        nn = np.ones((np.shape(edges)[0], 1))
+        nn[Gy[edges] < 0] = -1
 
-    x = x[edges]
-    y = y[edges] - a.transpose().ravel()
+        x = x[edges]
+        y = y[edges] - a.transpose().ravel()
 
-    b = b.reshape((b.shape[0]), 1)
-    nx = np.sign(A - B) / np.sqrt(1 + b ** 2) * b
-    ny = np.sign(A - B) / np.sqrt(1 + b ** 2)
+        b = b.reshape((b.shape[0]), 1)
+        nx = np.sign(A - B) / np.sqrt(1 + b ** 2) * b
+        ny = np.sign(A - B) / np.sqrt(1 + b ** 2)
 
-    curv = 2 * c * nn / ((1 + b ** 2) ** 1.5)
+        curv = 2 * c * nn / ((1 + b ** 2) ** 1.5)
 
-    i0 = np.minimum(A, B)
-    i1 = np.maximum(A, B)
+        i0 = np.minimum(A, B)
+        i1 = np.maximum(A, B)
 
-    return edges, x, y, nx.transpose().ravel(), ny.transpose().ravel(), curv.reshape(
-        (-1,)), i0.transpose().ravel(), i1.transpose().ravel()
+        return edges, x, y, nx.transpose().ravel(), ny.transpose().ravel(), curv.reshape(
+            (-1,)), i0.transpose().ravel(), i1.transpose().ravel()
+    return edges, edges, edges, edges, edges, edges, edges, edges
 
 
-@njit(cache=True)
 def v_edges(x, y, F, G, rows, Gx, Gy, w, maxValidOffset, edges, order, threshold, FF, GG):
     n_edges = np.shape(edges)[0]
 
@@ -392,20 +388,21 @@ def v_edges(x, y, F, G, rows, Gx, Gy, w, maxValidOffset, edges, order, threshold
         b = b[valid]
         c = c[valid]
 
-    x = x[edges] - a.transpose().ravel()
-    y = y[edges]
+        x = x[edges] - a.transpose().ravel()
+        y = y[edges]
 
-    nn = np.ones((np.shape(edges)[0], 1))
-    nn[Gx[edges] < 0] = -1
+        nn = np.ones((np.shape(edges)[0], 1))
+        nn[Gx[edges] < 0] = -1
 
-    b = b.reshape((b.shape[0]), 1)
-    nx = np.sign(A - B) / np.sqrt(1 + b ** 2)
-    ny = np.sign(A - B) / np.sqrt(1 + b ** 2) * b
+        b = b.reshape((b.shape[0]), 1)
+        nx = np.sign(A - B) / np.sqrt(1 + b ** 2)
+        ny = np.sign(A - B) / np.sqrt(1 + b ** 2) * b
 
-    curv = 2 * c * nn / ((1 + b ** 2) ** 1.5)
+        curv = 2 * c * nn / ((1 + b ** 2) ** 1.5)
 
-    i0 = np.minimum(A, B)
-    i1 = np.maximum(A, B)
+        i0 = np.minimum(A, B)
+        i1 = np.maximum(A, B)
 
-    return edges, x.transpose().ravel(), y.transpose().ravel(), nx.transpose().ravel(), ny.transpose().ravel(), \
-           curv.reshape((-1,)), i0.transpose().ravel(), i1.transpose().ravel()
+        return edges, x.transpose().ravel(), y.transpose().ravel(), nx.transpose().ravel(), ny.transpose().ravel(), \
+               curv.reshape((-1,)), i0.transpose().ravel(), i1.transpose().ravel()
+    return edges, edges, edges, edges, edges, edges, edges, edges
