@@ -456,6 +456,7 @@ def v_edges(F, G, rows, Gx, Gy, w, edges, order, threshold, x, y, I, C):
                 curv[k] = -curv[k]
 
             # generate circle subimage
+            R = abs(1/curv[k])
             if curv[k].item() != 0:
                 R = np.abs(1 / curv[k].item())
             if R > 1e4:
