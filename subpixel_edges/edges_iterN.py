@@ -202,9 +202,8 @@ def h_edges(F, G, rows, Gx, Gy, w, edges, order, threshold, x, y, cols,  I, C):
                 curv[k] = -curv[k]
 
             # generate circle subimage
-            if curv[k, 0].item() != 0:
-                R = np.abs(1 / curv[k, 0].item())
-
+            R = np.abs(1 / curv[k, 0].item()) if curv[k, 0].item() != 0 else 0
+            
             RG = float(10000)
             RL = float(4.5)
 
@@ -456,8 +455,8 @@ def v_edges(F, G, rows, Gx, Gy, w, edges, order, threshold, x, y, I, C):
                 curv[k] = -curv[k]
 
             # generate circle subimage
-            if curv[k].item() != 0:
-                R = np.abs(1 / curv[k].item())
+            R = np.abs(1 / curv[k, 0].item()) if curv[k, 0].item() != 0 else 0
+            
             if R > 1e4:
                 R = 1e4
 
