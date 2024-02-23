@@ -82,8 +82,8 @@ def h_edges(x, y, F, G, rows, Gx, Gy, w, maxValidOffset, edges, order, threshold
         SR = 0
 
         if u_border or d_border:
-            jj = np.int(np.floor((edges[k] - 1) / rows) + 1)
-            i = np.int(edges[k] - rows * (jj - 1))
+            jj = np.int_(np.floor((edges[k] - 1) / rows) + 1)
+            i = np.int_(edges[k] - rows * (jj - 1))
             rimvt = np.copy(F[i - 5:i + 6, jj - 3:jj + 2])
 
             if u_border:
@@ -289,8 +289,8 @@ def v_edges(x, y, F, G, rows, Gx, Gy, w, maxValidOffset, edges, order, threshold
         SR = 0
 
         if u_border or d_border:
-            j = np.int(np.floor((edges[k] - 1) / rows) + 1)
-            i = np.int(edges[k] - rows * (j - 1))
+            j = np.int_(np.floor((edges[k] - 1) / rows) + 1)
+            i = np.int_(edges[k] - rows * (j - 1))
             rimvt = np.copy(F[i - 2:i + 3, j - 6:j + 5])
             if u_border:
                 if m > 0:

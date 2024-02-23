@@ -29,8 +29,8 @@ def main_iter1(F, threshold, iters, order):
     absGyInner = np.abs(Gy[5:rows - 5, 2: cols - 2])
     absGxInner = np.abs(Gx[2:rows - 2, 5: cols - 5])
 
-    Ey = np.zeros((rows, cols), dtype=np.bool)
-    Ex = np.zeros((rows, cols), dtype=np.bool)
+    Ey = np.zeros((rows, cols), dtype=np.bool_)
+    Ex = np.zeros((rows, cols), dtype=np.bool_)
 
     Ey[5: rows - 5, 2: cols - 2] = np.logical_and.reduce([
         grad[5: rows - 5, 2: cols - 2] > threshold,
